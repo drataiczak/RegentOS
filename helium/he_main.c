@@ -1,8 +1,8 @@
-volatile unsigned int *const UART0DR = (unsigned int *) 0x101f1000;
+#include <arch.h>
 
 void print_uart0(const char *str) {
 	while(*str) {
-		*UART0DR = *str;
+		*UART0 = *str;
 		str++;
 	}
 }
