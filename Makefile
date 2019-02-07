@@ -1,8 +1,10 @@
 BUILDDIR := ./build
 HEDIR := ./helium
+TOOLDIR := ./tool
 
-.PHONY: all helium
+LAYER ?= helium
 
+.PHONY: all helium run
 all: $(BUILDDIR) helium
 
 $(BUILDDIR):
@@ -10,6 +12,9 @@ $(BUILDDIR):
 
 helium:
 	make -C $(HEDIR)
+
+run: $(LAYER)
+	qemu-system-arm -M versatilepb -m $(RAM) -nographic -kernel $(BUILDDIR)/$(LAYER).bin
 
 clean:
 	rm -rf $(BUILDDIR)/*
