@@ -14,7 +14,7 @@ helium:
 	make -C $(HEDIR)
 
 run: $(LAYER)
-	qemu-system-arm -M versatilepb -m $(RAM) -nographic -kernel $(BUILDDIR)/$(LAYER).bin
+	qemu-system-i386 -kernel $(BUILDDIR)/$(LAYER).bin
 
 clean:
 	rm -rf $(BUILDDIR)/*
