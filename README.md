@@ -1,8 +1,8 @@
 RegentOS
 
-A hobby OS developed for the STM32F103RB. The project consists of several layers:
+A hobby OS developed for the x86 architecture. The project consists of several layers:
 * Helium - The bootloader
-* Radon - The kernel
-* Neon - The userspace
+* Radon - The kernel (Not implemented yet)
+* Neon - The userspace (Not implemented yet)
 
 
