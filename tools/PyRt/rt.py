@@ -1,11 +1,12 @@
 import argparse
+import arghandler as ah
 
 def main():
     parser = argparse.ArgumentParser()
 
     set_args(parser)
-
-    parser.parse_args()
+    args = parser.parse_args()
+    handler = ah.ArgHandler(args)
 
 def set_args(parser):
     # Args:
