@@ -1,17 +1,17 @@
 BUILDDIR := ./build
-HEDIR := ./helium
+RNDIR := ./radon
 TOOLDIR := ./tool
 
 LAYER ?= helium
 
-.PHONY: all helium run
-all: $(BUILDDIR) helium
+.PHONY: all radon run
+all: $(BUILDDIR) radon
 
 $(BUILDDIR):
 	mkdir ./build
 
-helium:
-	make -C $(HEDIR)
+radon:
+	make -C $(RNDIR)
 
 run: $(LAYER)
 	qemu-system-i386 -kernel $(BUILDDIR)/$(LAYER).bin
