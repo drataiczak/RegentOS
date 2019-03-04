@@ -29,7 +29,7 @@ global _start:function (_start.end - _start)
 _start:
 	mov esp, stack_top
 	
-	extern ar_main
+	extern rn_main
 
 	; EAX = 0x36D76289
 	; EBX = Physical address of mb2 information structure
@@ -45,7 +45,7 @@ _start:
 	; ESP - Must be OS defined. Defined above.
 	; GDTR - The OS Must set up its own GDT before using GDTR since it may be invalid
 	; IDTR - Same as GDTR except must set up IDT
-	call ar_main
+	call rn_main
 
 	cli
 .hang:
