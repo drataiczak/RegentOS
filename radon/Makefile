@@ -35,7 +35,7 @@ ISO := $(BUILD_DIR)/RegentOS.iso
 .PHONY: all run clean
 
 all: $(AS_OBJS) $(C_OBJS)
-	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(CRTI) $(CRTBEGIN) $(wildcard $(BUILD_DIR)/*.o) $(CRTEND) $(CRTN)
+	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(wildcard $(BUILD_DIR)/*.o)
 	mkdir -p $(ISODIR)/boot/grub
 	cp $(BIN) $(ISODIR)/boot
 	cp $(GRUB_CFG) $(ISODIR)/boot/grub
