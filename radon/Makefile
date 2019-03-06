@@ -6,13 +6,10 @@ QEMU := qemu-system-i386
 # The default architecture as of now... figure out how to make this variable
 ARCH := x86
 
-CFLAGS := -ffreestanding -Wall -Werror -Wextra -c
+CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra
 ASFLAGS := -felf32
 LDFLAGS := -nostdlib -ffreestanding
 QEMUFLAGS := -cdrom
-
-CLIBS := -lgcc
-LDLIBS := -lgcc
 
 ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
@@ -20,6 +17,8 @@ BUILD_DIR := ../build
 ISODIR := $(BUILD_DIR)/isodir/
 
 ARTOOLS := ../boot
+
+CLIBS := -lgcc
 
 LD_FILES := $(ARTOOLS)/linker.ld
 GRUB_CFG := $(ARTOOLS)/grub.cfg
@@ -36,17 +35,17 @@ ISO := $(BUILD_DIR)/RegentOS.iso
 .PHONY: all run clean
 
 all: $(AS_OBJS) $(C_OBJS)
-	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(wildcard $(BUILD_DIR)/*.o) $(LDLIBS)
+	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(CRTI) $(CRTBEGIN) $(wildcard $(BUILD_DIR)/*.o) $(CRTEND) $(CRTN)
 	mkdir -p $(ISODIR)/boot/grub
 	cp $(BIN) $(ISODIR)/boot
 	cp $(GRUB_CFG) $(ISODIR)/boot/grub
 	grub-mkrescue -o $(ISO) $(ISODIR)
 
 $(AS_OBJS): $(AS_FILES)
-	$(AS) $(ASFLAGS) $^ -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 $(C_OBJS): $(C_FILES)
-	$(CC) $(CFLAGS) $^ -o $@ $(CLIBS)
+	$(CC) $(CFLAGS) -c $^ -o $@ $(CLIBS)
 
 run:
 	$(QEMU) $(QEMUFLAGS) $(ISO)
