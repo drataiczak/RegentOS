@@ -16,7 +16,7 @@ OBJS := $(patsubst %.c, $(BUILD)/%.o, $(SRC))
 .PHONY: all clean
 
 all: $(OBJS)
-	$(AR) $(ARFLAGS) $(BUILD)/libk.a $(OBJS)
+	$(AR) $(ARFLAGS) $(BUILD)/librn.a $(OBJS)
 	
 $(OBJS): $(SRC)
 	mkdir -p $(BUILD)

@@ -23,7 +23,7 @@ ARTOOLS := ../boot
 
 LIBK := -L$(LIBKDIR)
 CLIBS := -lgcc
-LDLIBS := -lk
+LDLIBS := -lrn
 
 LD_FILES := $(ARTOOLS)/linker.ld
 GRUB_CFG := $(ARTOOLS)/grub.cfg
