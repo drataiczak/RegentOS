@@ -1,3 +1,4 @@
 isodir/
 *.o
 *.bin
+*~
