@@ -6,19 +6,24 @@ QEMU := qemu-system-i386
 # The default architecture as of now... figure out how to make this variable
 ARCH := x86
 
-CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra
-ASFLAGS := -felf32
-LDFLAGS := -nostdlib -ffreestanding
-QEMUFLAGS := -cdrom
-
 ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
 BUILD_DIR := ../build
 ISODIR := $(BUILD_DIR)/isodir/
+LIBDIR := ./lib
+LIBKDIR := $(LIBDIR)/build
+LIBKHDR := $(wildcard $(LIBDIR)/*/include)
+
+CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(LIBKHDR)
+ASFLAGS := -felf32
+LDFLAGS := -nostdlib -ffreestanding -L$(LIBKDIR)
+QEMUFLAGS := -cdrom
 
 ARTOOLS := ../boot
 
+LIBK := -L$(LIBKDIR)
 CLIBS := -lgcc
+LDLIBS := -lrn
 
 LD_FILES := $(ARTOOLS)/linker.ld
 GRUB_CFG := $(ARTOOLS)/grub.cfg
@@ -34,8 +39,8 @@ ISO := $(BUILD_DIR)/RegentOS.iso
 
 .PHONY: all run clean
 
-all: $(AS_OBJS) $(C_OBJS)
-	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(wildcard $(BUILD_DIR)/*.o)
+all: $(AS_OBJS) $(C_OBJS) libk
+	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(wildcard $(BUILD_DIR)/*.o) $(LDLIBS)
 	mkdir -p $(ISODIR)/boot/grub
 	cp $(BIN) $(ISODIR)/boot
 	cp $(GRUB_CFG) $(ISODIR)/boot/grub
@@ -47,8 +52,12 @@ $(AS_OBJS): $(AS_FILES)
 $(C_OBJS): $(C_FILES)
 	$(CC) $(CFLAGS) -c $^ -o $@ $(CLIBS)
 
+libk:
+	make -C $(LIBDIR) 
+
 run:
 	$(QEMU) $(QEMUFLAGS) $(ISO)
 
 clean:
 	rm -rf $(BUILD_DIR)/*
+	make -C $(LIBDIR) clean
