@@ -1,21 +1,42 @@
-BUILDDIR := ./build
+BUILDDIR := $(shell pwd)/build
+BUILDHDR := $(BUILDDIR)/include
+BUILDBIN := $(BUILDDIR)/bin
+BUILDKNL := $(BUILDDIR)/kernel
+BUILDLIB := $(BUILDDIR)/lib
+BUILDISO := $(BUILDDIR)/isodir
+
 RNDIR := ./radon
+
 TOOLDIR := ./tool
 
-LAYER ?= helium
+LAYER ?= radon
+
+BIN := RegentOS
+
+QEMU := qemu-system-i386
+
+QEMUFLAGS := -cdrom $(BUILDBIN)/$(BIN).iso
+
+export BUILDDIR
+export BUILDHDR
+export BUILDBIN
+export BUILDKNL
+export BUILDLIB
+export BUILDISO
 
 .PHONY: all radon run
-all: $(BUILDDIR) radon
 
-$(BUILDDIR):
-	mkdir ./build
+all: radon
 
-radon:
-	make -C $(RNDIR)
+radon: buildenv
+	make -C $(LAYER)
+
+buildenv:
+	mkdir -p $(BUILDDIR) $(BUILDHDR) $(BUILDBIN) $(BUILDKNL) $(BUILDLIB) $(BUILDISO)/boot/grub
 
 run: $(LAYER)
-	qemu-system-i386 -kernel $(BUILDDIR)/$(LAYER).bin
+	$(QEMU) $(QEMUFLAGS)
 
 clean:
-	rm -rf $(BUILDDIR)/*
+	rm -rf $(BUILDDIR)
 
