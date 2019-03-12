@@ -2,15 +2,16 @@ CC := $(TARGET)-gcc
 AS := nasm
 LD := $(CC)
 
+# TODO Move this to root makefile and export it
+ARCH := x86
+
 ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
 LIBDIR := ./lib
-LIBKDIR := $(LIBDIR)/build
-LIBKHDR := $(wildcard $(LIBDIR)/*/include)
 
-CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(LIBKHDR)
+CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(BUILDHDR)
 ASFLAGS := -felf32
-LDFLAGS := -nostdlib -ffreestanding -L$(LIBKDIR)
+LDFLAGS := -nostdlib -ffreestanding -L$(BUILDLIB)
 
 ARTOOLS := ../boot
 
@@ -32,7 +33,8 @@ ISO := $(BUILDBIN)/RegentOS.iso
 
 .PHONY: all
 
-all: $(AS_OBJS) $(C_OBJS) libk
+# Putting libk first to ensure headers are installed might be hacky and non-portable
+all: libk $(AS_OBJS) $(C_OBJS)
 	$(LD) -T $(LD_FILES) -o $(BIN) $(LDFLAGS) $(wildcard $(BUILDDIR)/*.o) $(LDLIBS)
 	cp $(BIN) $(BUILDISO)/boot
 	cp $(GRUB_CFG) $(BUILDISO)/boot/grub
