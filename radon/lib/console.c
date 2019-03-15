@@ -2,6 +2,20 @@
 
 console_t cnsl;
 
+static void _term_puts(const char *str, size_t size) {
+	size_t i = 0;
+
+	for(i = 0; i < size; i++) {
+		term_putc(str[i]);
+	}
+}
+
+static void _term_putc(char c, uint8_t color, size_t x, size_t y) {
+	size_t index = y * CNSL_WIDTH + x;
+
+	cnsl.buf[index] = vga_entry(c, color);
+}
+
 size_t strlen(const char *str) {
 	size_t len = 0;
 
@@ -35,12 +49,6 @@ void console_set_color(uint8_t color) {
 	cnsl.color = color;
 }
 
-void _term_putc(char c, uint8_t color, size_t x, size_t y) {
-	size_t index = y * CNSL_WIDTH + x;
-
-	cnsl.buf[index] = vga_entry(c, color);
-}
-
 void term_putc(char c) {	
 	_term_putc(c, cnsl.color, cnsl.col, cnsl.row);
 
@@ -51,14 +59,6 @@ void term_putc(char c) {
 		if(++cnsl.row == CNSL_HEIGHT) {
 			cnsl.row = 0;
 		}
-	}
-}
-
-void _term_puts(const char *str, size_t size) {
-	size_t i = 0;
-
-	for(i = 0; i < size; i++) {
-		term_putc(str[i]);
 	}
 }
 
