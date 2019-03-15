@@ -1,10 +1,3 @@
-CC := $(TARGET)-gcc
-AS := nasm
-LD := $(CC)
-
-# TODO Move this to root makefile and export it
-ARCH := x86
-
 ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
 LIBDIR := ./lib
@@ -30,8 +23,6 @@ C_OBJS := $(patsubst $(KNLDIR)/%.c, $(BUILDDIR)/%.o, $(C_FILES))
 
 BIN := $(BUILDBIN)/RegentOS.bin
 ISO := $(BUILDBIN)/RegentOS.iso
-
-.PHONY: all
 
 # Putting libk first to ensure headers are installed might be hacky and non-portable
 all: libk $(AS_OBJS) $(C_OBJS)
