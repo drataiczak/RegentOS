@@ -9,10 +9,10 @@
 
 typedef enum vga_color {
 	VGA_BLACK = 		0,
-	VGA_BLUE = 		1,
+	VGA_BLUE = 		    1,
 	VGA_GREEN = 		2,
-	VGA_CYAN = 		3,
-	VGA_RED = 		4,
+	VGA_CYAN = 		    3,
+	VGA_RED = 		    4,
 	VGA_MAGENTA = 		5,
 	VGA_BROWN = 		6,
 	VGA_LT_GREY = 		7,
@@ -42,8 +42,6 @@ static inline uint8_t entry_color(vga_col_t fg, vga_col_t bg) {
 static inline uint16_t vga_entry(char c, uint8_t color) {
 	return (uint16_t) c | (uint16_t) color << 8;
 }
-
-size_t strlen(const char *str);
 
 void console_init(void);
 void console_set_color(uint8_t color);

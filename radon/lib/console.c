@@ -1,4 +1,5 @@
 #include <console.h>
+#include <string.h>
 
 console_t cnsl;
 
@@ -14,16 +15,6 @@ static void _term_putc(char c, uint8_t color, size_t x, size_t y) {
 	size_t index = y * CNSL_WIDTH + x;
 
 	cnsl.buf[index] = vga_entry(c, color);
-}
-
-size_t strlen(const char *str) {
-	size_t len = 0;
-
-	while(str[len]) {
-		len++;
-	}
-
-	return len;
 }
 
 void console_init(void) {
