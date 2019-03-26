@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <console.h>
+#include <tty.h>
 
 #if defined(__linux__)
 	#error Please use the appropriate cross compiler
@@ -13,6 +13,6 @@
 #endif
 
 void rn_main(void) {
-	console_init();
+	tty_init();
 	term_puts("Hello world!");
 }

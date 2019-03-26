@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CNSL_WIDTH (80)
-#define CNSL_HEIGHT (25)
+#define TTY_WIDTH (80)
+#define TTY_HEIGHT (25)
 
 typedef enum vga_color {
 	VGA_BLACK = 		0,
@@ -26,14 +26,14 @@ typedef enum vga_color {
 	VGA_WHITE = 		15,
 } vga_col_t;
 
-typedef struct console {
+typedef struct tty {
 	size_t row;
 	size_t col;
 	uint8_t fg;
 	uint8_t bg;
 	uint8_t color;
 	uint16_t *buf;
-} console_t;
+} tty_t;
 
 static inline uint8_t entry_color(vga_col_t fg, vga_col_t bg) {
 	return fg | bg << 4;
@@ -43,8 +43,8 @@ static inline uint16_t vga_entry(char c, uint8_t color) {
 	return (uint16_t) c | (uint16_t) color << 8;
 }
 
-void console_init(void);
-void console_set_color(uint8_t color);
+void tty_init(void);
+void tty_set_color(uint8_t color);
 void term_putc(char c);
 void term_puts(const char *str);
 
