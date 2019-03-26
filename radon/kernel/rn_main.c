@@ -14,5 +14,5 @@
 
 void rn_main(void) {
 	tty_init();
-	term_puts("Hello world!");
+	tty_puts("Hello world!");
 }

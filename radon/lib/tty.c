@@ -3,15 +3,15 @@
 
 static tty_t tty;
 
-static void _term_puts(const char *str, size_t size) {
+static void _tty_puts(const char *str, size_t size) {
 	size_t i = 0;
 
 	for(i = 0; i < size; i++) {
-		term_putc(str[i]);
+		tty_putc(str[i]);
 	}
 }
 
-static void _term_putc(char c, uint8_t color, size_t x, size_t y) {
+static void _tty_putc(char c, uint8_t color, size_t x, size_t y) {
 	size_t index = y * TTY_WIDTH + x;
 
 	tty.buf[index] = vga_entry(c, color);
@@ -40,8 +40,8 @@ void tty_set_color(uint8_t color) {
 	tty.color = color;
 }
 
-void term_putc(char c) {	
-	_term_putc(c, tty.color, tty.col, tty.row);
+void tty_putc(char c) {	
+	_tty_putc(c, tty.color, tty.col, tty.row);
 
 	/* Check for end of line/terminal */
 	if(++tty.col == TTY_WIDTH) {
@@ -53,6 +53,6 @@ void term_putc(char c) {
 	}
 }
 
-void term_puts(const char *str) {
-	_term_puts(str, strlen(str));
+void tty_puts(const char *str) {
+	_tty_puts(str, strlen(str));
 }

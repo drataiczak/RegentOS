@@ -45,7 +45,7 @@ static inline uint16_t vga_entry(char c, uint8_t color) {
 
 void tty_init(void);
 void tty_set_color(uint8_t color);
-void term_putc(char c);
-void term_puts(const char *str);
+void tty_putc(char c);
+void tty_puts(const char *str);
 
 #endif
