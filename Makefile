@@ -24,6 +24,7 @@ BIN := RegentOS
 QEMU := qemu-system-i386
 
 QEMUFLAGS := -cdrom $(BUILDBIN)/$(BIN).iso
+QEMUDBGFLAGS := -s -S
 
 export CC
 export AS
@@ -38,7 +39,7 @@ export BUILDISO
 export BUILDBOOT
 export ARCH
 
-.PHONY: all radon run
+.PHONY: all radon run debug
 
 all: radon
 
@@ -50,6 +51,9 @@ buildenv:
 
 run: $(LAYER)
 	$(QEMU) $(QEMUFLAGS)
+
+debug: $(LAYER)
+	$(QEMU) $(QEMUDBGFLAGS) $(QEMUFLAGS) 
 
 clean:
 	rm -rf $(BUILDDIR)

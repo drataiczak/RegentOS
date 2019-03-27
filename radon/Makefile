@@ -2,7 +2,7 @@ ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
 LIBDIR := ./lib
 
-CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(BUILDHDR)
+CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(BUILDHDR) -g
 ASFLAGS := -felf32
 LDFLAGS := -nostdlib -ffreestanding -L$(BUILDLIB)
 
