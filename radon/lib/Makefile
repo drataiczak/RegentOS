@@ -1,7 +1,7 @@
 INCLDIR := ./include
 INCLUDE := -I$(INCLDIR)
 
-CFLAGS := -Wall -Werror -Wextra -ffreestanding $(INCLUDE)
+CFLAGS := -Wall -Werror -Wextra -ffreestanding $(INCLUDE) -g
 ARFLAGS := rcs
 
 SRC :=  $(wildcard *.c)
