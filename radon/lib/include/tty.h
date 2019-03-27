@@ -7,6 +7,8 @@
 #define TTY_WIDTH (80)
 #define TTY_HEIGHT (25)
 
+#define TTY_TABSTOP (4)
+
 typedef enum vga_color {
 	VGA_BLACK = 		0,
 	VGA_BLUE = 		    1,

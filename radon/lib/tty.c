@@ -1,7 +1,7 @@
 #include <tty.h>
 #include <string.h>
 
-static tty_t tty;
+tty_t tty;
 
 static void _tty_puts(const char *str, size_t size) {
 	size_t i = 0;
@@ -15,6 +15,22 @@ static void _tty_putc(char c, uint8_t color, size_t x, size_t y) {
 	size_t index = y * TTY_WIDTH + x;
 
 	tty.buf[index] = vga_entry(c, color);
+}
+
+static void tty_scroll() {
+	size_t x;
+	size_t y;
+
+	/* Always make sure you've got a blank line */
+	tty.row = TTY_HEIGHT - 2;
+
+	for(y = 0; y < TTY_HEIGHT - 1; y++) {
+		for(x = 0; x < TTY_WIDTH; x++) {
+			const size_t index = y * TTY_WIDTH + x;
+			const size_t next = (y + 1) * TTY_WIDTH + x;
+			tty.buf[index] = vga_entry(tty.buf[next], tty.color);
+		}
+	}
 }
 
 void tty_init(void) {
@@ -40,16 +56,38 @@ void tty_set_color(uint8_t color) {
 	tty.color = color;
 }
 
-void tty_putc(char c) {	
-	_tty_putc(c, tty.color, tty.col, tty.row);
+void tty_putc(char c) {
+	int i;
 
-	/* Check for end of line/terminal */
-	if(++tty.col == TTY_WIDTH) {
-		tty.col = 0;
+	switch(c) {
+		case '\n':
+			tty.col = 0;
+			if(TTY_HEIGHT - 1 == ++tty.row) {
+				tty_scroll();
+			}
 
-		if(++tty.row == TTY_HEIGHT) {
-			tty.row = 0;
-		}
+			break;
+
+		case '\t':
+			for(i = 0; i < TTY_TABSTOP; i++) {
+				tty_putc(' ');
+			}
+
+			break;
+
+		default:
+			_tty_putc(c, tty.color, tty.col, tty.row);
+			
+			/* Check for the end of the row and column */
+			if(TTY_WIDTH == ++tty.col) {
+				tty.col = 0;
+
+				if(TTY_HEIGHT - 1 == ++ tty.row) {
+					tty_scroll();
+				}	
+			}
+
+			break;
 	}
 }
 
