@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-
+#include <stdio.h>
 #include <tty.h>
 
 #if defined(__linux__)
@@ -14,5 +14,17 @@
 
 void rn_main(void) {
 	tty_init();
-	tty_puts("Hello world!");
+
+	int i = 0;
+    char *str = "My predefined char *!\n";
+
+	for(i = 0; i < 80; i++) {
+		tty_puts("Hello world!\n");
+	}
+
+	for(i = 0; i < 10; i++) {
+		tty_puts("\t[ADDITIONAL]\n");
+	}
+
+    printk("Printk works! %s", str);
 }
