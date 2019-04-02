@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <tty.h>
+#include <itoa.h>
 
 #if defined(__linux__)
 	#error Please use the appropriate cross compiler
@@ -16,15 +17,19 @@ void rn_main(void) {
 	tty_init();
 
 	int i = 0;
-    char *str = "My predefined char *!\n";
 
-	for(i = 0; i < 80; i++) {
-		tty_puts("Hello world!\n");
-	}
+	for(i = 0; i < 85; i++) {
+		if(i % 2 == 0) {
+            printk("\tHello, world\n");
+        }
+        else {
+            printk("%s", "Hello, world\n");
+        }
+    }
 
-	for(i = 0; i < 10; i++) {
-		tty_puts("\t[ADDITIONAL]\n");
-	}
-
-    printk("Printk works! %s", str);
+    printk("Decimal < 0: %d\n", -559);
+    printk("Decimal == 0: %d\n", 0);
+    printk("Decimal > 0: %d\n", 9824);
+    printk("Hex == 0: %x\n", 0);
+    printk("Hex > 0: %x\n", 112);
 }

@@ -3,14 +3,19 @@
 #include <string.h>
 #include <stdarg.h> /* va_* */
 #include <tty.h>
+#include <itoa.h>
 
 static int print(const char *data, size_t len) {
     const unsigned char *bytes = (const unsigned char *)data;
     size_t i;
 
     for(i = 0; i < len; i++) {
-        /* TODO Deal with possibility of failure */
-        tty_putc(bytes[i]);
+        if(bytes[i]) {
+            tty_putc(bytes[i]);
+        }
+        else {
+            break;
+        }
     }
 
     return 1;
@@ -19,6 +24,7 @@ static int print(const char *data, size_t len) {
 int printk(const char *restrict fmt, ...) {
     va_list params;
     int written = 0;
+    int base = 0;
     const char *fmt_begin_at;
 
     va_start(params, fmt);
@@ -55,47 +61,63 @@ int printk(const char *restrict fmt, ...) {
         fmt_begin_at = fmt++;
 
         switch(*fmt) {
+            case 'd':
+//                fmt++;
+//                int val = va_arg(params, int);
+//                char buf[100];
+
+//                print(itoa(val, buf, DEC), 100);
+
+//                written++;
+//                break;
+                base = DEC;
+                /* Fallthrough */
+
+            case 'x':
+                fmt++;
+                int v = va_arg(params, int);
+                char b[100];
+                base = base > 0 ? base : HEX;
+
+                print(itoa(v, b, base), 100);
+
+                /* Calculate written properly */
+                written++;
+                break;
+
             case 'c':
-                    fmt++;
-                    char c = (char)va_arg(params, int);
+                fmt++;
+                char c = (char)va_arg(params, int);
 
-                    if(!max_remaining) {
-                        /* TODO EOVERFLOW */
-                        return -1;
-                    }
+                if(!max_remaining) {
+                    /* TODO EOVERFLOW */
+                    return -1;
+                }
 
-                    if(0 == print(&c, sizeof(c))) {
-                        return -1;
-                    }
+                if(0 == print(&c, sizeof(c))) {
+                    return -1;
+                }
 
-                    written++;
-
-                    break;
+                written++;
+                break;
 
             case 's':
-                    fmt++;
-                    const char *str = va_arg(params, const char *);
-                    size_t len = strlen(str);
+                fmt++;
+                const char *str = va_arg(params, const char *);
+                size_t len = strlen(str);
 
-                    if(max_remaining < len) {
-                        /* TODO EOVERFLOW */
-                        return -1;
-                    }
+                if(max_remaining < len) {
+                    /* TODO EOVERFLOW */
+                    return -1;
+                }
 
-                    if(0 == print(str, len)) {
-                        return -1;
-                    }
+                if(0 == print(str, len)) {
+                    return -1;
+                }
 
-                    written += len;
+                written += len;
+                break;
 
-                    break;
-
-            case 'd':
-                    /* TODO implement */
-                    return 0;
-            case 'x':
-                    /* TODO implemnt */
-                    return 0;
             default:
                 fmt = fmt_begin_at;
                 size_t sz = strlen(fmt);
