@@ -35,6 +35,7 @@ typedef struct tty {
 	uint8_t bg;
 	uint8_t color;
 	uint16_t *buf;
+    uint16_t cursor_pos;
 } tty_t;
 
 static inline uint8_t entry_color(vga_col_t fg, vga_col_t bg) {

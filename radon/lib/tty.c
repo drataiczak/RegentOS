@@ -1,5 +1,6 @@
 #include <tty.h>
 #include <string.h>
+#include "io.h"
 
 tty_t tty;
 
@@ -9,6 +10,18 @@ static void _tty_puts(const char *str, size_t size) {
 	for(i = 0; i < size; i++) {
 		tty_putc(str[i]);
 	}
+}
+
+static void _tty_move_cursor(unsigned short pos) {
+    #define FB_COMMAND_PORT 0x3D4
+    #define FB_DATA_PORT 0x3D5
+    #define TTY_HIGH_BYTE_CMD 14
+    #define TTY_LOW_BYTE_CMD 15
+
+    outb(FB_COMMAND_PORT, TTY_HIGH_BYTE_CMD);
+    outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
+    outb(FB_COMMAND_PORT, TTY_LOW_BYTE_CMD);
+    outb(FB_DATA_PORT, pos & 0x00FF);
 }
 
 static void _tty_putc(char c, uint8_t color, size_t x, size_t y) {
@@ -43,6 +56,7 @@ void tty_init(void) {
 	tty.bg = VGA_BLACK;
 	tty.color = entry_color(tty.fg, tty.bg);
 	tty.buf = (uint16_t *)0xB8000;
+    tty.cursor_pos = 0;
 
 	for(y = 0; y < TTY_HEIGHT; y++) {
 		for(x = 0; x < TTY_WIDTH; x++) {
