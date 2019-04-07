@@ -13,15 +13,10 @@ static void _tty_puts(const char *str, size_t size) {
 }
 
 static void _tty_move_cursor(unsigned short pos) {
-    #define FB_COMMAND_PORT 0x3D4
-    #define FB_DATA_PORT 0x3D5
-    #define TTY_HIGH_BYTE_CMD 14
-    #define TTY_LOW_BYTE_CMD 15
-
-    outb(FB_COMMAND_PORT, TTY_HIGH_BYTE_CMD);
-    outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
-    outb(FB_COMMAND_PORT, TTY_LOW_BYTE_CMD);
-    outb(FB_DATA_PORT, pos & 0x00FF);
+    outb(TTY_CMD_PORT, TTY_HIGH_BYTE_CMD);
+    outb(TTY_DATA_PORT, ((pos >> 8) & 0x00FF));
+    outb(TTY_CMD_PORT, TTY_LOW_BYTE_CMD);
+    outb(TTY_DATA_PORT, pos & 0x00FF);
 }
 
 static void _tty_putc(char c, uint8_t color, size_t x, size_t y) {
