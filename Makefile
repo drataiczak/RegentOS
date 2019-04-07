@@ -3,6 +3,7 @@ AS := nasm
 AR := $(TARGET)-ar
 LD := $(CC)
 
+ROOTDIR := $(shell pwd)
 BUILDDIR := $(shell pwd)/build
 BUILDHDR := $(BUILDDIR)/include
 BUILDBIN := $(BUILDDIR)/bin
@@ -30,6 +31,7 @@ export CC
 export AS
 export AR
 export LD
+export ROOTDIR
 export BUILDDIR
 export BUILDHDR
 export BUILDBIN

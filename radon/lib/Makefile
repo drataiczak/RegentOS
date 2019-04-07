@@ -1,5 +1,8 @@
+ARCHLIB := $(ROOTDIR)/radon/arch/$(ARCH)/lib
+ARCHLIBHDR := $(ARCHLIB)/include
+
 INCLDIR := ./include
-INCLUDE := -I$(INCLDIR)
+INCLUDE := -I$(INCLDIR) -I$(ARCHLIBHDR)
 
 CFLAGS := -Wall -Werror -Wextra -ffreestanding $(INCLUDE) -g
 ARFLAGS := rcs
@@ -7,8 +10,9 @@ ARFLAGS := rcs
 AS := nasm
 ASFLAGS := -felf32
 
-AS_SRC := $(wildcard *.asm)
-AS_OBJS := $(patsubst %.asm, $(BUILDLIB)/%.o, $(AS_SRC))
+# The asm is arch dependent and the basis of the C
+AS_SRC := $(wildcard $(ARCHLIB)/*.asm)
+AS_OBJS := $(patsubst $(ARCHLIB)/%.asm, $(BUILDLIB)/%.o, $(AS_SRC))
 
 SRC :=  $(wildcard *.c)
 OBJS := $(patsubst %.c, $(BUILDLIB)/%.o, $(SRC))
@@ -17,7 +21,7 @@ all: $(AS_OBJS) $(OBJS)
 	$(AR) $(ARFLAGS) $(BUILDLIB)/librn.a $(OBJS) $(AS_OBJS)
 	cp $(INCLDIR)/* $(BUILDHDR)
 
-$(BUILDLIB)/%.o: %.asm
+$(BUILDLIB)/%.o: $(ARCHLIB)/%.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
 $(BUILDLIB)/%.o: %.c

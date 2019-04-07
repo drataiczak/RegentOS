@@ -3,7 +3,7 @@ KNLDIR := ./kernel
 KNLINCDIR := $(KNLDIR)/include
 LIBDIR := ./lib
 
-INCLUDES := -I$(BUILDHDR) -I$(KNLINCDIR)
+INCLUDES := -I$(BUILDHDR) -I$(ARCHDIR) -I$(KNLINCDIR)
 
 CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra $(INCLUDES) -g
 ASFLAGS := -felf32
