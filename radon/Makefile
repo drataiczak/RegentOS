@@ -1,8 +1,11 @@
 ARCHDIR := ./arch/$(ARCH)
 KNLDIR := ./kernel
+KNLINCDIR := $(KNLDIR)/include
 LIBDIR := ./lib
 
-CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra -I$(BUILDHDR) -g
+INCLUDES := -I$(BUILDHDR) -I$(KNLINCDIR)
+
+CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra $(INCLUDES) -g
 ASFLAGS := -felf32
 LDFLAGS := -nostdlib -ffreestanding -L$(BUILDLIB)
 

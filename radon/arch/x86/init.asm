@@ -45,6 +45,10 @@ _start:
 	; ESP - Must be OS defined. Defined above.
 	; GDTR - The OS Must set up its own GDT before using GDTR since it may be invalid
 	; IDTR - Same as GDTR except must set up IDT
+
+    push ebx
+    push eax
+
 	call rn_main
 
 	cli
