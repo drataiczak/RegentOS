@@ -1,6 +1,6 @@
 #include <tty.h>
 #include <string.h>
-#include "io.h"
+#include <io.h>
 
 tty_t tty;
 
@@ -44,6 +44,9 @@ static void tty_scroll() {
 			tty.buf[index] = vga_entry(tty.buf[next], tty.color);
 		}
 	}
+
+    /* TODO Solely to satisfy -Werror. This will be implemented properly in the future */
+    _tty_move_cursor(0);
 }
 
 void tty_init(void) {
