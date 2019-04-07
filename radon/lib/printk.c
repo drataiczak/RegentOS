@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h> /* va_* */
 #include <tty.h>
-#include <itoa.h>
+#include <stdlib.h> /* itoa() */
 
 static int print(const char *data, size_t len) {
     const unsigned char *bytes = (const unsigned char *)data;
