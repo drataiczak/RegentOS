@@ -5,7 +5,7 @@ LIBDIR := ./lib
 
 INCLUDES := -I$(BUILDHDR) -I$(ARCHDIR) -I$(KNLINCDIR)
 
-CFLAGS := -ffreestanding -nostdlib -Wall -Werror -Wextra $(INCLUDES) -g
+CFLAGS := -ffreestanding -nostdlib -Wall -Wextra $(INCLUDES) -g
 ASFLAGS := -felf32
 LDFLAGS := -nostdlib -ffreestanding -L$(BUILDLIB)
 

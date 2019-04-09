@@ -4,7 +4,7 @@ ARCHLIBHDR := $(ARCHLIB)/include
 INCLDIR := ./include
 INCLUDE := -I$(INCLDIR) -I$(ARCHLIBHDR)
 
-CFLAGS := -Wall -Werror -Wextra -ffreestanding $(INCLUDE) -g
+CFLAGS := -Wall -Wextra -ffreestanding $(INCLUDE) -g
 ARFLAGS := rcs
 
 AS := nasm
