@@ -40,7 +40,7 @@ static void tty_scroll() {
 		}
 	}
 
-    tty.cursor_pos = (tty.row) * TTY_WIDTH;
+    tty.cursor_pos = tty.row * TTY_WIDTH;
     _tty_move_cursor(tty.cursor_pos);
 }
 
