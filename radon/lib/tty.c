@@ -36,12 +36,12 @@ static void tty_scroll() {
 		for(x = 0; x < TTY_WIDTH; x++) {
 			const size_t index = y * TTY_WIDTH + x;
 			const size_t next = (y + 1) * TTY_WIDTH + x;
-			tty.buf[index] = vga_entry(tty.buf[next], tty.color);
+			tty.buf[index] = tty.buf[next];
 		}
 	}
 
-    /* TODO Solely to satisfy -Werror. This will be implemented properly in the future */
-    _tty_move_cursor(0);
+    tty.cursor_pos = (tty.row) * TTY_WIDTH;
+    _tty_move_cursor(tty.cursor_pos);
 }
 
 void tty_init(void) {
@@ -53,8 +53,10 @@ void tty_init(void) {
 	tty.fg = VGA_GREEN;
 	tty.bg = VGA_BLACK;
 	tty.color = entry_color(tty.fg, tty.bg);
-	tty.buf = (uint16_t *)0xB8000;
+	tty.buf = (uint16_t *) FRAMEBUFFER;
     tty.cursor_pos = 0;
+
+    _tty_move_cursor(tty.cursor_pos);
 
 	for(y = 0; y < TTY_HEIGHT; y++) {
 		for(x = 0; x < TTY_WIDTH; x++) {
