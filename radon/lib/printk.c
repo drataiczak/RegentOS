@@ -4,6 +4,7 @@
 #include <stdarg.h> /* va_* */
 #include <tty.h>
 #include <stdlib.h> /* itoa() */
+#include <ctype.h> /* to_upper()/to_lower() */
 
 static int print(const char *data, size_t len) {
     const unsigned char *bytes = (const unsigned char *)data;
@@ -18,13 +19,14 @@ static int print(const char *data, size_t len) {
         }
     }
 
-    return 1;
+    return i;
 }
 
 int printk(const char *restrict fmt, ...) {
     va_list params;
     int written = 0;
     int base = 0;
+    int is_upper = 0;
     const char *fmt_begin_at;
 
     va_start(params, fmt);
@@ -62,15 +64,11 @@ int printk(const char *restrict fmt, ...) {
 
         switch(*fmt) {
             case 'd':
-//                fmt++;
-//                int val = va_arg(params, int);
-//                char buf[100];
-
-//                print(itoa(val, buf, DEC), 100);
-
-//                written++;
-//                break;
                 base = DEC;
+                /* Fallthrough */
+
+            case 'X':
+                DEC == base ? (is_upper = 0) : (is_upper = 1);
                 /* Fallthrough */
 
             case 'x':
@@ -78,11 +76,22 @@ int printk(const char *restrict fmt, ...) {
                 int v = va_arg(params, int);
                 char b[100];
                 base = base > 0 ? base : HEX;
+               
+                itoa(v, b, base);
 
-                print(itoa(v, b, base), 100);
+                if(is_upper) {
+                    for(int j = 0; j < 100; j++) {
+                        b[j] = to_upper(b[j]);
+                    }
+                }
+                else {
+                    for(int j = 0; j < 100; j++) {
+                        b[j] = to_lower(b[j]);
+                    }
+                }
 
-                /* Calculate written properly */
-                written++;
+                written += print(b, 100);
+
                 break;
 
             case 'c':
