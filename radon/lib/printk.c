@@ -58,6 +58,7 @@ int printk(const char *restrict fmt, ...) {
 
         fmt_begin_at = fmt++;
 
+        /* TODO Implement %u */
         switch(*fmt) {
             case 'd':
                 base = DEC;
