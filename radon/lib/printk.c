@@ -117,6 +117,12 @@ int printk(const char *restrict fmt, ...) {
                     return -1;
                 }
 
+                if(0 == len) {
+                    print("NULL", strlen("NULL"));
+                    written += strlen("NULL");
+                    break;
+                }
+
                 if(0 == print(str, len)) {
                     return -1;
                 }
