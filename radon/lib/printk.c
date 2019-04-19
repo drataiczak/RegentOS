@@ -8,15 +8,11 @@
 
 static int print(const char *data, size_t len) {
     const unsigned char *bytes = (const unsigned char *)data;
-    size_t i;
+    size_t i = 0;
 
-    for(i = 0; i < len; i++) {
-        if(bytes[i]) {
-            tty_putc(bytes[i]);
-        }
-        else {
-            break;
-        }
+    while(bytes[i] && i < len) {
+        tty_putc(bytes[i]);
+        i++;
     }
 
     return i;
@@ -68,29 +64,30 @@ int printk(const char *restrict fmt, ...) {
                 /* Fallthrough */
 
             case 'X':
+                /* Check if we got here through fallthrough or not */
                 DEC == base ? (is_upper = 0) : (is_upper = 1);
                 /* Fallthrough */
 
             case 'x':
                 fmt++;
-                int v = va_arg(params, int);
-                char b[100];
-                base = base > 0 ? base : HEX;
+                int val = va_arg(params, int);
+                char buf[12];
+                base = (base > 0) ? base : HEX;
                
-                itoa(v, b, base);
+                itoa(val, buf, base);
 
                 if(is_upper) {
-                    for(int j = 0; j < 100; j++) {
-                        b[j] = to_upper(b[j]);
+                    for(long unsigned i = 0; i < sizeof(buf); i++) {
+                        buf[i] = to_upper(buf[i]);
                     }
                 }
                 else {
-                    for(int j = 0; j < 100; j++) {
-                        b[j] = to_lower(b[j]);
+                    for(long unsigned i = 0; i < sizeof(buf); i++) {
+                        buf[i] = to_lower(buf[i]);
                     }
                 }
 
-                written += print(b, 100);
+                written += print(buf, sizeof(buf));
 
                 break;
 

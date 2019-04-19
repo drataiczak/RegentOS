@@ -39,9 +39,6 @@ static void tty_scroll() {
 			tty.buf[index] = tty.buf[next];
 		}
 	}
-
-    tty.cursor_pos = tty.row * TTY_WIDTH;
-    _tty_move_cursor(tty.cursor_pos);
 }
 
 void tty_init(void) {
@@ -50,8 +47,8 @@ void tty_init(void) {
 	
 	tty.row = 0;
 	tty.col = 0;
-	tty.fg = VGA_GREEN;
-	tty.bg = VGA_BLACK;
+	tty.fg = VGA_BLACK;
+	tty.bg = VGA_WHITE;
 	tty.color = entry_color(tty.fg, tty.bg);
 	tty.buf = (uint16_t *) FRAMEBUFFER;
     tty.cursor_pos = 0;
@@ -103,6 +100,9 @@ void tty_putc(char c) {
 
 			break;
 	}
+
+    tty.cursor_pos = (tty.row) * TTY_WIDTH;
+    _tty_move_cursor(tty.cursor_pos);
 }
 
 void tty_puts(const char *str) {

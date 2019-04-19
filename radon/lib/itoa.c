@@ -46,7 +46,7 @@ char *itoa(int num, char *str, int base) {
 
     str[i] = '\0';
     _reverse(str, i);
-
+    
     /* Properly handle other numbers (duh) */
     return str;
 }
