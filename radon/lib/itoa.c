@@ -50,3 +50,26 @@ char *itoa(int num, char *str, int base) {
     /* Properly handle other numbers (duh) */
     return str;
 }
+
+char *utoa(unsigned int num, char *str) {
+    int i = 0;
+
+    if(0 == num) {
+        str[i++] = '0';
+        str[i] = '\0';
+
+        return str;
+    }
+
+    while(0 != num) {
+        int remainder = num % DEC;
+       
+        str[i++] = remainder + '0';
+        num /= DEC;
+    }
+
+    str[i] = '\0';
+    _reverse(str, i);
+
+    return str;
+}

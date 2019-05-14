@@ -60,13 +60,26 @@ int printk(const char *restrict fmt, ...) {
 
         /* TODO Implement %u */
         switch(*fmt) {
+            case 'u': {
+                fmt++;
+                unsigned int val = va_arg(params, unsigned int);
+                char buf[12];
+
+                utoa(val, buf);
+
+                written += print(buf, sizeof(buf));
+            }
+                break;
+
             case 'd':
                 base = DEC;
+
                 /* Fallthrough */
 
             case 'X':
                 /* Check if we got here through fallthrough or not */
-                DEC == base ? (is_upper = 0) : (is_upper = 1);
+                (DEC == base) ? (is_upper = 0) : (is_upper = 1);
+
                 /* Fallthrough */
 
             case 'x':
@@ -74,7 +87,7 @@ int printk(const char *restrict fmt, ...) {
                 int val = va_arg(params, int);
                 char buf[12];
                 base = (base > 0) ? base : HEX;
-               
+
                 itoa(val, buf, base);
 
                 if(is_upper) {

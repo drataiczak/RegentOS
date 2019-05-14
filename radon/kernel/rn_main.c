@@ -55,8 +55,7 @@ static void verify_grub2(unsigned long magic, unsigned long addr) {
                                 ((struct multiboot_tag_basic_meminfo *)tag)->mem_upper);
                 break;
             case MULTIBOOT_TAG_TYPE_BOOTDEV:
-                // TODO %d -> %u when implemented 
-                printk("[GRUB2] Boot device 0x%x, %d, %d\n",
+                printk("[GRUB2] Boot device 0x%x, %u, %u\n",
                                 ((struct multiboot_tag_bootdev *)tag)->biosdev,
                                 ((struct multiboot_tag_bootdev *)tag)->slice,
                                 ((struct multiboot_tag_bootdev *)tag)->part);
